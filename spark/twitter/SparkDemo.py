@@ -23,7 +23,7 @@ from pyspark.mllib.regression import LabeledPoint
 #符号化推文的文本
 #删除停用词，标点符号，url等
 remove_spl_char_regex = re.compile('[%s]' % re.escape(string.punctuation))  # regex to remove special characters
-stopwords = [u'rt', u're', u'i', u'me', u'my', u'myself', u'we', u'our',               u'ours', u'ourselves', u'you', u'your',
+stopwords = [u'rt', u're', u'i', u'me', u'my', u'myself', u'we', u'our', u'ours', u'ourselves', u'you', u'your',
              u'yours', u'yourself', u'yourselves', u'he', u'him', u'his', u'himself', u'she', u'her', u'hers',
              u'herself', u'it', u'its', u'itself', u'they', u'them', u'their', u'theirs', u'themselves', u'what',
              u'which', u'who', u'whom', u'this', u'that', u'these', u'those', u'am', u'is', u'are', u'was', u'were',
@@ -73,7 +73,7 @@ def doc2vec(document):
             vec = np.array(lookup_bd.value.get(word)) + 1
             # print(vec)
             # 若该特征词在预先训练好的模型中，则添加到向量中
-            if vec != None:
+            if vec is not None:
                 doc_vec += vec
                 tot_words += 1
         except:
@@ -116,8 +116,12 @@ tst_dataRDD = sc.parallelize(tst_data)
 print(trnData.count())
 
 model = RandomForest.trainClassifier(trnData, numClasses=3, categoricalFeaturesInfo={},
-                                     numTrees=3, featureSubsetStrategy="auto",
-                                     impurity='gini', maxDepth=4, maxBins=32)
+                                     numTrees=6, featureSubsetStrategy="auto",
+                                     impurity='gini', maxDepth=8, maxBins=32)
+print(model.numTrees())
+# 6
+print(model.totalNumNodes())
+# 1106
 
 # 利用训练好的模型进行模型性能测试
 predictions = model.predict(tst_dataRDD.map(lambda x: x.features))
