@@ -72,6 +72,7 @@ def doc2vec(document):
         # 查找该词在预训练的word2vec模型中的特征值
             vec = np.array(lookup_bd.value.get(word)) + 1
             # print(vec)
+            # print(type(vec))
             # 若该特征词在预先训练好的模型中，则添加到向量中
             if vec is not None:
                 doc_vec += vec
@@ -82,48 +83,78 @@ def doc2vec(document):
     vec = doc_vec / float(tot_words)
     return vec
 
-# 读入tweets.json作为分类器训练数据集
-with open('tweets.json', 'r') as f:
-    rawTrn_data = json.load(f)
-    f.close()
+import pandas as pd
+import ssl
+ssl._create_default_https_context = ssl._create_unverified_context
+from textblob import TextBlob
+import nltk
+nltk.download('averaged_perceptron_tagger')
+nltk.download('brown')
+#读入数据csv数据
+def readCSV(csvName):
+    df = pd.read_table(csvName, sep=',', header='infer')
+    # 删除没有用的列，只用3个元素：推特内容，洲名（地点，用于可视化），情感值（需要第三方语义分析工具转换）
+    # df = df.drop('created_at', 'tweet_id', 'likes', 'retweet_count',
+    #         'source', 'user_id', 'user_name', 'user_screen', 'user_screen_name',
+    #         'user_description', 'user_join_date', 'user_followers_count',
+    #         'user_location', 'lat', 'long', 'city', 'country',
+    #         'continent', 'state_code', 'collected_at')
 
-trn_data = []
-for obj in rawTrn_data['results']:
-    token_text = tokenize(obj['text']) # 规范化推特文本，进行分词
-    tweet_text = doc2vec(token_text) # 将文本转换为向量
-    # 使用LabeledPoint 将文本对应的情感属性polariy：该条训练数据的标记label，tweet_text：训练分类器的features特征，结合成可作为spark mllib分类训练的数据类型
-    trn_data.append(LabeledPoint(obj['polarity'], tweet_text))
+    # 因为要escape大量的特殊字符或写正则，所以暂时不用这种方法遍历数据
+    # df = sparkSession.read.format('csv').option("header", 'true').load("hashtag_donaldtrump_small.csv")# .option("multiLine", "true")
+    # df = sparkSession.read.csv("hashtag_donaldtrump_small.csv", header=True, multiLine=True)
+    # df = sparkSession.read.csv("hashtag_donaldtrump_small.csv")
+    # df = sparkSession.read.option("multiline", "true").option("quote", '"').option("header", "true").option("escape", "\\").option("escape", '"').csv('hashtag_donaldtrump_small.csv')
 
-trnData = sc.parallelize(trn_data)
-# print(trn_data)
-# print(trnData)
-print("------------------------------------------------------")
+    # print(type(df))
+    # df.cache()
+    # df.show(10)
+    # df.printSchema()
 
-# 读入hillary.json作为分类器测试数据集
-with open('hillary.json', 'r') as f:
-    rawTst_data = json.load(f)
-    f.close()
+    # print(type(df))
+    # 遍历数据，做数据预处理
+    trn_data = []
 
-tst_data = []
-for obj in rawTst_data['results']:
-    token_text = tokenize(obj['text'])
-    tweet_text = doc2vec(token_text)
-    tst_data.append(LabeledPoint(obj['polarity'], tweet_text))
+    for index, row in df.iterrows():
+        # print(index,row['tweet'],row['state'])
+        # 语义分析，转换成感情值
+        # print(TextBlob(row['tweet']).sentiment.polarity)
 
-tst_dataRDD = sc.parallelize(tst_data)
+        token_text = tokenize(row['tweet'])  # 规范化推特文本，进行分词
+        tweet_text = doc2vec(token_text)  # 将文本转换为向量
+        # 使用LabeledPoint 将文本对应的情感属性polariy：该条训练数据的标记label，tweet_text：训练分类器的features特征，结合成可作为spark mllib分类训练的数据类型
+        tempPolarity = TextBlob(row['tweet']).sentiment.polarity
+
+        if tempPolarity > 0:
+            # 积极
+            tempPolarity = 0
+        if tempPolarity == 0:
+            # 无感
+            tempPolarity = 1
+        if tempPolarity < 0:
+            # 消极
+            tempPolarity = 2
+
+        trn_data.append(LabeledPoint(tempPolarity, tweet_text))
+
+    trnData = sc.parallelize(trn_data)
+    # print(trn_data)
+    # print(trnData)
+    print(trnData.count())
+    return trnData
 
 # 训练随机森林分类器模型
-print(trnData.count())
-
-model = RandomForest.trainClassifier(trnData, numClasses=3, categoricalFeaturesInfo={},
+model = RandomForest.trainClassifier(readCSV('hashtag_donaldtrump_small.csv'), numClasses=3, categoricalFeaturesInfo={},
                                      numTrees=6, featureSubsetStrategy="auto",
                                      impurity='gini', maxDepth=8, maxBins=32)
+
 print(model.numTrees())
 # 6
 print(model.totalNumNodes())
 # 1106
 
 # 利用训练好的模型进行模型性能测试
+tst_dataRDD = readCSV('hashtag_joebiden_small.csv')
 predictions = model.predict(tst_dataRDD.map(lambda x: x.features))
 labelsAndPredictions = tst_dataRDD.map(lambda lp: lp.label).zip(predictions)
 # 计算分类错误率
@@ -133,6 +164,8 @@ print('Test Error = ' + str(testErr))
 print('Learned classification tree model:')
 # 输出训练好的随机森林的分类决策模型
 print(model.toDebugString())
+
+print("------------------------------------------------------")
 
 print(456)
 print(456)
