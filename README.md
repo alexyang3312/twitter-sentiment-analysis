@@ -1,5 +1,13 @@
 # 小组讨论
 
+相关资料：
+* https://www.jianshu.com/p/310ef75e150d
+* https://blog.csdn.net/qq_41853758/article/details/82934506
+* https://blog.csdn.net/wustjk124/article/details/81320995
+* https://blog.csdn.net/zyp199301/article/details/71727278
+* https://my.oschina.net/u/4347889/blog/3346852
+* https://blog.csdn.net/p_function/article/details/77713611
+
 周知：
 * `大部分代码源自网络，进行了一部分修改，提交到老师前需要一系列修改并做查重，不要抄袭，引用他人代码需要标注；`
 * `大数据的小组项目没有宽限期；`
@@ -37,6 +45,10 @@ Spark MLlib中提供的机器学习模型处理的是向量形式的数据，因
 并将模型保存至word2vecM_simple文件夹中，因此本次实验中将tweets转换为向量时直接调用此模型即可。
 
 可以使用text8自行训练词向量转换模型，或线上搜索利用tweets进行分词训练的word2vec模型。
+https://www.cnblogs.com/tina-smile/p/5204619.html
+https://blog.51cto.com/u_15127586/2670975
+https://blog.csdn.net/chuchus/article/details/71330882
+https://blog.csdn.net/chuchus/article/details/77145579
 
 ---
 
@@ -83,14 +95,19 @@ noun phrase extraction, sentiment analysis, classification, translation, and mor
 推特上的地理信息可以在做数据可视化的时候将数据直观地呈现在美国地图上。
 
 ## 朴素贝叶斯实现方式
+http://spark.apache.org/docs/latest/ml-classification-regression.html#naive-bayes
 
+https://developer.ibm.com/alert-zh/
+
+https://marcobonzanini.com/2015/03/09/mining-twitter-data-with-python-part-2/
+
+http://introtopython.org/visualization_earthquakes.html#Adding-detail
 
 ## 结尾段
-
-
-除了CSV文件外，也可以通过推特API获取流式数据通过Spark Stream进行情感分析，
-我们使用了Spark MLlib的随机森林与朴素贝叶斯进行情感分析，已经使用了BaseMap进行可视化，
-通过可视化结果，我们可以直观的感受2个候选人在美国各个州的受欢迎程度。
+除了CSV文件外，也可以通过推特API获取流式数据，
+使用TwitterAPI可以很轻松地收集到数百万条推文用于算法训练。
+通过Spark Stream进行情感分析，我们使用了Spark MLlib的随机森林与朴素贝叶斯进行情感分析，
+已经使用了BaseMap进行可视化，通过可视化结果，我们可以直观的感受2个候选人在美国各个州的受欢迎程度。
 
 （需要对比一下2种模型的不同与优劣，最后下结论）
 情感分析还适用于其他场景，例如房价、物价、交通等等，在大数据中扮演十分重要的角色。
