@@ -1,6 +1,7 @@
 # 小组讨论
 
 相关资料：
+* https://www.cnblogs.com/mrchige/p/6346601.html
 * https://www.jianshu.com/p/310ef75e150d
 * https://blog.csdn.net/qq_41853758/article/details/82934506
 * https://blog.csdn.net/wustjk124/article/details/81320995
@@ -45,10 +46,10 @@ Spark MLlib中提供的机器学习模型处理的是向量形式的数据，因
 并将模型保存至word2vecM_simple文件夹中，因此本次实验中将tweets转换为向量时直接调用此模型即可。
 
 可以使用text8自行训练词向量转换模型，或线上搜索利用tweets进行分词训练的word2vec模型。
-https://www.cnblogs.com/tina-smile/p/5204619.html
-https://blog.51cto.com/u_15127586/2670975
-https://blog.csdn.net/chuchus/article/details/71330882
-https://blog.csdn.net/chuchus/article/details/77145579
+* https://www.cnblogs.com/tina-smile/p/5204619.html
+* https://blog.51cto.com/u_15127586/2670975
+* https://blog.csdn.net/chuchus/article/details/71330882
+* https://blog.csdn.net/chuchus/article/details/77145579
 
 ---
 
@@ -95,13 +96,10 @@ noun phrase extraction, sentiment analysis, classification, translation, and mor
 推特上的地理信息可以在做数据可视化的时候将数据直观地呈现在美国地图上。
 
 ## 朴素贝叶斯实现方式
-http://spark.apache.org/docs/latest/ml-classification-regression.html#naive-bayes
-
-https://developer.ibm.com/alert-zh/
-
-https://marcobonzanini.com/2015/03/09/mining-twitter-data-with-python-part-2/
-
-http://introtopython.org/visualization_earthquakes.html#Adding-detail
+* http://spark.apache.org/docs/latest/ml-classification-regression.html#naive-bayes
+* https://developer.ibm.com/alert-zh
+* https://marcobonzanini.com/2015/03/09/mining-twitter-data-with-python-part-2
+* http://introtopython.org/visualization_earthquakes.html#Adding-detail
 
 ## 结尾段
 除了CSV文件外，也可以通过推特API获取流式数据，
