@@ -77,14 +77,9 @@ Spark MLlib中提供的机器学习模型处理的是向量形式的数据，因
 * https://blog.csdn.net/chuchus/article/details/77145579
 
 Ian:
-So the important thing is to talk about how you approached doing the classification in a big-data way that makes sense, 
-not just we did some random forests but how did you specifically exploit big-data techniques to make this faster. 
-It's not just a machine learning coursework, 
-although you need to talk about that you also need to talk about how you exploited big data techniques to make this more efficient.
+* So the important thing is to talk about how you approached doing the classification in a big-data way that makes sense, not just we did some random forests but how did you specifically exploit big-data techniques to make this faster. It's not just a machine learning coursework, although you need to talk about that you also need to talk about how you exploited big data techniques to make this more efficient.
 
-So basically, you need to describe how you used spark to parallelise your data - 
-you should show how you successfully split your dataset into multiple parts and trained the classifier that way, 
-as opposed to just running it normally on a single node.
+* So basically, you need to describe how you used spark to parallelise your data - you should show how you successfully split your dataset into multiple parts and trained the classifier that way, as opposed to just running it normally on a single node.
 
 
 ---
