@@ -33,13 +33,14 @@
 * How do we determine the number of test sets and training sets? We only have 2 CSV files, which are hashtag_donaldtrump.csv (971157 rows of data) and hashtag_joebiden.csv (777078 rows of data). 
 * How can we improve the accuracy of the Random Forest model?
 * We found Spark DataFrame cannot read the CSV normally when some strange strings showed up.
+* 豪胜的一些问题（自己）.
 
 please always include a 2 min overview of your current progress.
 论文标题叫什么？ Twitter sentiment analysis of the US election
 数据预处理是否要抽出来，2个算法公用相同的预处理？
 如何使用交叉引用去优化随机森林模型？
 结尾段需要对比2个算法的优劣，然后做出总结。
-
+I would probably suggest a Local model (but you still don't know what that means).
 
 论文要求：
 * `4月26日前要提交，4个人写一篇论文即可；`
