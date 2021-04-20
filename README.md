@@ -63,7 +63,7 @@ I would probably suggest a Local model (but you still don't know what that means
 依赖关系：
 * 志鹏确定一下预处理部分是否能摘出来吗？
 * 豪胜确定离线模型是否能搞出来？
-* 
+* 明翰的输出结果能跟雄峰的对上吗？
 
 
 Spark MLlib中提供的机器学习模型处理的是向量形式的数据，因此我们需将文本转换为向量形式，
