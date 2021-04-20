@@ -143,8 +143,6 @@ noun phrase extraction, sentiment analysis, classification, translation, and mor
 
 ---
 Overview
-Please let me introduce you a little bit information about our project.
-
 Our project is about Twitter sentiment analysis of the US election. 
 We have several steps to make this happen.
 
