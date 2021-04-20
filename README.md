@@ -60,6 +60,12 @@ I would probably suggest a Local model (but you still don't know what that means
 * KNN-豪胜
 * 语义转换包-?
 
+依赖关系：
+* 志鹏确定一下预处理部分是否能摘出来吗？
+* 豪胜确定离线模型是否能搞出来？
+* 
+
+
 Spark MLlib中提供的机器学习模型处理的是向量形式的数据，因此我们需将文本转换为向量形式，
 这里我们利用Spark提供的Word2Vec功能结合其提供的text8文件中的一部分单词进行了word2vec模型的预训练，
 并将模型保存至word2vecM_simple文件夹中，因此本次实验中将tweets转换为向量时直接调用此模型即可。
