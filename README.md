@@ -27,8 +27,19 @@
 * pandas可能会有性能问题，默认没办法并行，是否需要使用dataframe，写正则？
 * 读取数据是否需要使用Python多线程？
 * 是否需要使用多分区？
-* 训练集与测试集的数量划分？
 * 对训练好的模型进行评估+性能测试+优化模型？
+
+问老师问题：
+* How do we determine the number of test sets and training sets? We only have 2 CSV files, which are hashtag_donaldtrump.csv (971157 rows of data) and hashtag_joebiden.csv (777078 rows of data). 
+* How can we improve the accuracy of the Random Forest model?
+* We found Spark DataFrame cannot read the CSV normally when some strange strings showed up.
+
+please always include a 2 min overview of your current progress.
+论文标题叫什么？ Twitter sentiment analysis of the US election
+数据预处理是否要抽出来，2个算法公用相同的预处理？
+如何使用交叉引用去优化随机森林模型？
+结尾段需要对比2个算法的优劣，然后做出总结。
+
 
 论文要求：
 * `4月26日前要提交，4个人写一篇论文即可；`
