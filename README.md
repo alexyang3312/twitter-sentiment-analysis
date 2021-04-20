@@ -141,3 +141,27 @@ noun phrase extraction, sentiment analysis, classification, translation, and mor
 （需要对比一下2种模型的不同与优劣，最后下结论）
 情感分析还适用于其他场景，例如房价、物价、交通等等，在大数据中扮演十分重要的角色。
 
+---
+Overview
+Please let me introduce you a little bit information about our project.
+
+Our project is about Twitter sentiment analysis of the US election. 
+We have several steps to make this happen.
+
+Step 1:
+Data Collecting, we downloaded raw data from Kaggle website, they are two CVS files which included so many tweets about JoeBiden and DonaldTrump. 
+
+Step 2:
+Data Preproccessing, we need to read messages from those CSV files, and format data. we need to split them,  remove useless keywords, URLs and special characters, and we need to use offline model called Word2Vector to transform words into vectors. Then we use TextBlob, which is a Python natural language processing package, converts the content of Twitter text into an emotional attribute value, such as positive, neutral and negative. then we have two important things: vectors and the corresponding [ˌkɒrəˈspɒndɪŋ] sentiment value, which means we have label and features, label and features make up the training data set.
+
+Step 3:
+Data analysis, we use train data set to train or use test data set to test our 2-3 different models, such as Random Forest, Naive Bayes, and KNN(maybe).
+
+Step 4:
+Optimization Model, actually, we have some problems about this step, so we will let you know later. 
+
+Step 5:
+Data Applying, we use new brand data to feed our trained models and use Basemap which is a third party package for map visualization in Python to draw two Amercian maps and they will show how people feel about Trump and Biden in different states.
+
+
+
