@@ -82,6 +82,10 @@ not just we did some random forests but how did you specifically exploit big-dat
 It's not just a machine learning coursework, 
 although you need to talk about that you also need to talk about how you exploited big data techniques to make this more efficient.
 
+So basically, you need to describe how you used spark to parallelise your data - 
+you should show how you successfully split your dataset into multiple parts and trained the classifier that way, 
+as opposed to just running it normally on a single node.
+
 
 ---
 
