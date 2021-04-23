@@ -75,7 +75,7 @@ Ian:
 ## Abstract
 最后写
 
-Keywords: TextBlob, Random Forest, Naive Bayes...
+Keywords: Random Forest, Naive Bayes, TextBlob, Basemap ...
 
 ## Introduction
 In today's DT (Data Technology) age, social media platforms have become a popular communication tools, such as Twitter, Facebook, Instagram and so on. People record their lives and share or discuss their opinions on different topics on mobile devices or PCs every day. With more and more users discussing or expressing their opinions, Twitter has become a valuable source of comments and emotional information.
@@ -84,7 +84,7 @@ For the massive distributed data on the Internet, those data could be used to do
 
 American election related information data of Twitter could be combined with the Spark MLlib techniques used for sentiment analysis, through the analysis of the sentiment results, it could visually see people of different places in the United States thought the two presidential candidates, also it could be applied to different machine learning algorithms to understand whether twitter related with real results.
 
-There are two algorithms are used for sentiment analysis: Random Forest and Naive Bayes.
+There are two classification algorithms are used for sentiment analysis: Random Forest and Naive Bayes.
 `（豪胜，确定是否需要KNN，如果需要则要引入相关概念，引用，图片等。）`
 
 Random Forest is a flexible ensemble classifier algorithm, which constructs multiple decision trees based on random samples and random features of the training dataset, and the output is determined by the vote. The random reduces the influence of exceptional samples and features on classification results.（引用：2篇文献）
@@ -97,7 +97,7 @@ Figure 2 Classification process based on the random forest algorithm A redesign 
 Before training the model, TextBlob is used to convert the content of tweets into emotional values. TextBlob is a text-processing Python (2 and 3) library. It provides a straightforward API for tackling basic natural language processing (NLP) tasks including part-of-speech tagging, noun phrase extraction, sentiment analysis, classification, translation, and more. （引用：1篇文献）
 
 The aim of this paper is to evaluate which algorithm is more suitable twitter sentiment analysis and the relationship between sentiment analysis result and reality result.
-（志鹏，明翰，阐述论文的目的，论文的观点）
+（志鹏，明翰，豪胜，雄峰，阐述论文的目的，论文的观点）
 
 There are several sections about the sentiment analysis, the first section is data selection, cleaning and pre-processing, the data should be perpared before the data analysis. The second section is word to vector, an offline model is needed for feature extraction and vectorization of the text. The thrid section is data analysis, the processed data is divided into train dataset and test dataset, and they are used to train or test 2-3 different models, such as Random Forest, Naive Bayes, and KNN(maybe), after that the models are evaluated and optimized respectively. The final section is data visualization, the analysis results is used to draw two Amercian maps by using Basemap which is a third party package for map visualization in Python, and they could show how people feel about Trump and Biden in different states.
 
@@ -106,20 +106,16 @@ The raw data were downloaded from Kaggle website, they are two CVS files which a
 
 In data preprocessing, the text data are read by using Spark from those CSV files, and then they are splitted to 70% for training and 30% for testing. Moreover, they are filtered, such as remove useless keywords, URLs and special characters. An offline model called Word2Vector is used to transform words into vectors. Then TextBlob is used, which is a Python natural language processing package and converts the content of Twitter text into an emotional attribute value, such as positive, neutral and negative. Then there are two important parameters: vectors and the corresponding sentiment value, which means label and features, label and features make up the training data set.
 
-## Word to vector and Feature extra.
-（豪胜）
-
-
 ## Data analysis by Random Forest implementation
 （需要引入文献）
 为什么使用随机森林，情感分析是把推特数据归为若干类：积极，中立，消极，而随机森林正好适用于这种分类算法。
-
 
 After training dataset are pre-processed, those data could be used into RandomForest which is a learning algorithm for a random forest model for classification by using trainClassifier method. There are several parameters are used in this step, such as "numClasses = 3", "numTrees=6" and "maxDepth=8". Labels should take values {0, 1, ..., numClasses-1}, and the label are 0, 1 and 2, so the numClasses = 3.
 
 Improving the accuracy of the classifier depends on the features and the tuning of the parameters, and the number and depth of the tree could be adjusted and compared the results to see if it works. 
 
-
+## Word to vector and feature extraction.
+（豪胜）
 
 ## Data analysis by Naive Bayes implementation
 （志鹏）
