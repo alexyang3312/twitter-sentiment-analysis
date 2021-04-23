@@ -70,6 +70,11 @@ Ian:
 
 ---
 # Twitter sentiment analysis of the US election
+## Abstract
+最后写
+
+Keywords: TextBlob, Random Forest, Naive Bayes...
+
 ## Introduction
 In today's DT (Data Technology) age, social media platforms have become a popular communication tools, such as Twitter, Facebook, Instagram and so on. People record their lives and share or discuss their opinions on different topics on mobile devices or PCs every day. With more and more users discussing or expressing their opinions, Twitter has become a valuable source of comments and emotional information.
 
@@ -77,84 +82,44 @@ For the massive distributed data on the Internet, those data could be used to do
 
 American election related information data of Twitter could be combined with the Spark MLlib techniques used for sentiment analysis, through the analysis of the sentiment results, it could visually see people of different places in the United States thought the two presidential candidates, also it could be applied to different machine learning algorithms to understand whether twitter related with real results.
 
-Two algorithms are used for sentiment analysis: Random Forest and Naive Bayes.
+There are two algorithms are used for sentiment analysis: Random Forest and Naive Bayes.
 `（豪胜，确定是否需要KNN，如果需要则要引入相关概念，引用，图片等。）`
 
-Random Forest is a flexible ensemble classifier algorithm, which constructs multiple decision trees based on random samples and random features of the training dataset, and the output is determined by the vote. The random reduces the influence of exceptional samples and features on classification results.（引用：2篇文章）
+Random Forest is a flexible ensemble classifier algorithm, which constructs multiple decision trees based on random samples and random features of the training dataset, and the output is determined by the vote. The random reduces the influence of exceptional samples and features on classification results.（引用：2篇文献）
 
 ![image](https://user-images.githubusercontent.com/42234021/115829497-f9a48580-a406-11eb-9ba9-2b2f48e6a140.png)
 Figure 2 Classification process based on the random forest algorithm A redesign of the original inspired figure found from the following website: https://www.linkedin.com/pulse/random-forest-algorithm-in- teractive-discussion-niraj-kumar/.
 
 `（志鹏，需要朴素贝叶斯的相关概念，引用，图片等。）`
 
+Before training the model, TextBlob is used to convert the content of tweets into emotional values. TextBlob is a text-processing Python (2 and 3) library. It provides a straightforward API for tackling basic natural language processing (NLP) tasks including part-of-speech tagging, noun phrase extraction, sentiment analysis, classification, translation, and more. （引用：1篇文献）
+
 The aim of this paper is to evaluate which algorithm is more suitable twitter sentiment analysis and the relationship between sentiment analysis result and reality result.
 （志鹏，明翰，阐述论文的目的，论文的观点）
 
-情感值的描述写在introduction
+There are several sections about the sentiment analysis, the first section is data selection, cleaning and pre-processing, the data should be perpared before the data analysis. The second section is word to vector, an offline model is needed for feature extraction and vectorization of the text. The thrid section is data analysis, the processed data is divided into train dataset and test dataset, and they are used to train or test 2-3 different models, such as Random Forest, Naive Bayes, and KNN(maybe), after that the models are evaluated and optimized respectively. The final section is data visualization, the analysis results is used to draw two Amercian maps by using Basemap which is a third party package for map visualization in Python, and they could show how people feel about Trump and Biden in different states.
 
-There are several sections about the sentiment analysis, the first section is 
-
-The first section analyses which language is easier to learn for beginners, then the second section focuses on which language is more popular in the world and what are their application scenarios, the final section will explain which language is developed more efficiently.
-
-Data analysis, we use train data set to train or use test data set to test our 2-3 different models, such as Random Forest, Naive Bayes, and KNN(maybe).
-Optimization Model, actually, we have some problems about this step, so we will let you know later. 
-
-Data Applying, we use new brand data to feed our trained models and use Basemap which is a third party package for map visualization in Python to draw two Amercian maps and they will show how people feel about Trump and Biden in different states.
-
-此外，还需要使用一个离线模型对文本进行特征提取以及向量化，
-之后建立模型并对模型进行训练与测试，评估+优化模型？可以先不写？
-应用模型于数据，将将分析结果汇总并可视化，可以清晰的看到推特数据与真实结果的差异性，
-推特上的地理信息可以在做数据可视化的时候将数据直观地呈现在美国地图上。
-
-Spark MLlib中提供的机器学习模型处理的是向量形式的数据，因此我们需将文本转换为向量形式，
-这里我们利用Spark提供的Word2Vec功能结合其提供的text8文件中的一部分单词进行了word2vec模型的预训练，
-并将模型保存至word2vecM_simple文件夹中，因此本次实验中将tweets转换为向量时直接调用此模型即可。
-
-流程：
-获取推特数据
-数据预处理
-数据分析（训练，测试）
-评估+优化模型？可以先不写？
-应用数据，结果可视化（通过Python的地图可视化工具Basemap）
-
-Process:
-Get Twitter data
-Data preprocessing
-Data analysis (training, testing)
-Evaluation + Optimization Model? Can I just leave it out?
-Apply the data and visualize the results (via Python's map visualization tool BaseMap)
-
-我们主要使用2个算法来做情感分析：随机森林，朴素贝叶斯。
-（需要介绍一下随机森林与朴素贝叶斯）
-
-流程：
-1. 获取推特数据
-2. 数据预处理
-3. 数据分析（训练，测试）
-4. 评估+优化模型？可以先不写？
-5. 应用数据，结果可视化（通过Python的地图可视化工具Basemap）
-
-## Data selection, pre-processing and cleaning
+## Data selection, cleaning and pre-processing
 The raw data were downloaded from Kaggle website, they are two CVS files which are hashtag_donaldtrump.csv (971157 rows of data) and hashtag_joebiden.csv (777078 rows of data). They included loads of tweets about JoeBiden and DonaldTrump.
 
+There are a lot of data columns in the CSV files, but only tweet text messages and geographic information are used.
+The data were divided into two training sets and test sets and preprocessed respectively.
+
+In data preprocessing, text data needs to be splitted and filtered,
+TextBlob, a Python natural language processing package, converts the content of Twitter text into an emotional attribute value called polarity (positive, neutral, negative).
+
 we need to read messages from those CSV files, and format data. we need to split them, remove useless keywords, URLs and special characters, and we need to use offline model called Word2Vector to transform words into vectors. Then we use TextBlob, which is a Python natural language processing package, converts the content of Twitter text into an emotional attribute value, such as positive, neutral and negative. then we have two important things: vectors and the corresponding sentiment value, which means we have label and features, label and features make up the training data set.
+
+## Word to vector
+（豪胜）
+
 
 ## Data analysis by Random Forest implementation
 （需要引入文献）
 
-分别从Kaggle网站上获取关于特朗普与拜登的相关推特原始CSV数据，
-里面的数据项很多，但被用到的却只有推特内容以及地理信息。
-把数据分成2训练集与测试集并分别进行预处理，
-在数据预处理过程中，文本数据需要背分词且过滤，
-通过Python自然语言处理包TextBlob可以将推特文本内容转化成情感属性值polarity（积极，中立，消极）。
 
-（需要改写+引用）
-TextBlob is a Python (2 and 3) library for processing textual data. 
-It provides a simple API for diving into common natural language processing (NLP) tasks such as part-of-speech tagging, 
-noun phrase extraction, sentiment analysis, classification, translation, and more.
 
 提升分类器的准确度取决于你选择的features，以及参数的调教，可以调整树的数量以及深度，再去对比结果，看是否有效。
-
 
 ## Data analysis by Naive Bayes implementation
 （志鹏）
@@ -164,6 +129,9 @@ noun phrase extraction, sentiment analysis, classification, translation, and mor
 
 ## Data Visualization
 （雄峰）
+可以清晰的看到推特数据与真实结果的差异性，
+推特上的地理信息可以在做数据可视化的时候将数据直观地呈现在美国地图上。
+
 
 ## Conclusion
 除了CSV文件外，也可以通过推特API获取流式数据，
@@ -183,6 +151,9 @@ Faculty of Philosophy, Sciences and Languages at Ribeirao Preto University of Sa
 
 《Application of Support Vector Machine, Random Forest, and Genetic Algorithm Optimized Random Forest Models in Groundwater Potential Mapping》
 Seyed Amir Naghibi1 & Kourosh Ahmadi2 & Alireza Daneshi3
+
+《Twitter Sentiment Analysis on Coronavirus using Textblob Chhinder》
+Chhinder Kaur and Anand Sharma
 
 ---
 # 参考资料
