@@ -139,7 +139,7 @@ we need to read messages from those CSV files, and format data. we need to split
 通过Spark Stream进行情感分析，我们使用了Spark MLlib的随机森林与朴素贝叶斯进行情感分析，
 已经使用了BaseMap进行可视化，通过可视化结果，我们可以直观的感受2个候选人在美国各个州的受欢迎程度。
 
-（明翰，志鹏，需要对比一下2种模型的不同与优劣，最后下结论）
+（志鹏，豪胜，雄峰，明翰，需要对比一下模型的不同与优劣，最后下结论）
 情感分析还适用于其他场景，例如房价、物价、交通等等，在大数据中扮演十分重要的角色。
 
 ## References
