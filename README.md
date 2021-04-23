@@ -9,13 +9,20 @@
 * https://my.oschina.net/u/4347889/blog/3346852
 * https://blog.csdn.net/p_function/article/details/77713611
 
+2021年04月23日会议纪要：
+* 论文的模板有404问题，已跟Issac提出；
+* 需要朴素贝叶斯的概念以及相关引用，图片等；
+* 决定是否要用KNN，如果需要则需要文案；
+
+
+
 2021年04月15日会议纪要：
-1. 特征上可以把like等加进来；
-2. 大家需要读别人找到的文献；
-3. 需要看朴素和随机是不是有相同的数据预处理和相同的数据展示；
-4. 情感值的描述写在introduction；
-5. 文献需要引用的话得先发到群里周知大家；
-6. 每周二开周会，23号第一个组内deadline；
+* 特征上可以把like等加进来；
+* 大家需要读别人找到的文献；
+* 需要看朴素和随机是不是有相同的数据预处理和相同的数据展示；
+* 情感值的描述写在introduction；
+* 文献需要引用的话得先发到群里周知大家；
+* 每周二开周会，23号第一个组内deadline；
 
 周知：
 * `大部分代码源自网络，进行了一部分修改，提交到老师前需要一系列修改并做查重，不要抄袭，引用他人代码需要标注；`
@@ -24,9 +31,6 @@
 * 小组项目不需要使用HDFS，直接从硬盘读取文件即可；
 
 已知问题：
-* 论文的模板有404问题，已跟Issac提出；
-* 
-
 * pandas可能会有性能问题，默认没办法并行，是否需要使用dataframe，写正则？
 * 读取数据是否需要使用Python多线程？
 * `是否需要使用多分区？需要！`
@@ -92,20 +96,58 @@ Ian:
 
 ---
 
-# 推特美国大选情感分析
-## 开头段
-在当今这个DT（Data Technology）时代，社交媒体已成为深受互联网用户欢迎的沟通工具，如Twitter、Facebook、Instagram等等。
-每天都有大量的数据产生，人们每天在移动设备或PC上记录生活，分享或讨论对不同话题的看法，
-随着越来越多的用户讨论或表达自己的观点，推特已经成为人们评论与情感信息的宝贵来源。
+# Twitter sentiment analysis of the US election
+## Introduction
+In today's DT (Data Technology) age, social media platforms have become a popular communication tools, such as Twitter, Facebook, Instagram and so on. People record their lives and share or discuss their opinions on different topics on mobile devices or PCs every day. With more and more users discussing or expressing their opinions, Twitter has become a valuable source of comments and emotional information.
 
-对于网上海量分布地数据，可以被用来做情感分析，挖掘各种观点，
-情感分析可应用于众多领域，通过分析公众的评论，情感分析可以帮助政府评估自身的优势和不足。
-例如，"特朗普让美国再次衰落"，这条评论清楚地表达了用户对政府的负面情绪，
-情感分析有助于了解公众情绪是如何影响选举结果的。
+For the massive distributed data on the Internet, those data could be used to do sentiment analysis in many fields and excavate all kinds of opinions. By analyzing public comments, it could help the government evaluate its own strengths and weaknesses. For example, "Trump has made America weak again", which clearly expresses users' negative feelings towards the government, and sentiment analysis helps to understand how public sentiment affects election results.
 
-我们利用推特上的美国大选相关信息数据结合Spark MLlib实现人们对美国这两位总统候选人的情感分析，
-通过情感分析的结果，可以直观地看到在美国不同地方的网民们的看法，
-应用不同的机器学习算法去理解是否有推特与真实结果是否有关联。
+American election related information data of Twitter could be combined with the Spark MLlib techniques used for sentiment analysis, through the analysis of the sentiment results, it could visually see people of different places in the United States thought the two presidential candidates, also it could be applied to different machine learning algorithms to understand whether twitter related with real results.
+
+`（确定是否需要KNN）`
+Two algorithms are used for sentiment analysis: Random Forest and Naive Bayes. (Need to introduce random forest and Naive Bayes)
+
+
+![image](https://user-images.githubusercontent.com/42234021/115829497-f9a48580-a406-11eb-9ba9-2b2f48e6a140.png)
+Figure 2 Classification process based on the random forest algorithm A redesign of the original inspired figure found from the following website: https://www.linkedin.com/pulse/random-forest-algorithm-in- teractive-discussion-niraj-kumar/.
+
+`（需要朴素贝叶斯的概念以及相关引用，图片等。）`
+
+
+
+流程：
+获取推特数据
+数据预处理
+数据分析（训练，测试）
+评估+优化模型？可以先不写？
+应用数据，结果可视化（通过Python的地图可视化工具Basemap）
+
+Process:
+
+Get Twitter data
+
+Data preprocessing
+
+Data analysis (training, testing)
+
+Evaluation + Optimization Model? Can I just leave it out?
+
+Apply the data and visualize the results (via Python's map visualization tool BaseMap)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 我们主要使用2个算法来做情感分析：随机森林，朴素贝叶斯。
 （需要介绍一下随机森林与朴素贝叶斯）
@@ -118,6 +160,8 @@ Ian:
 5. 应用数据，结果可视化（通过Python的地图可视化工具Basemap）
 
 ## 随机森林实现方式
+（需要引入文献）
+
 分别从Kaggle网站上获取关于特朗普与拜登的相关推特原始CSV数据，
 里面的数据项很多，但被用到的却只有推特内容以及地理信息。
 把数据分成2训练集与测试集并分别进行预处理，
@@ -140,7 +184,7 @@ noun phrase extraction, sentiment analysis, classification, translation, and mor
 * https://marcobonzanini.com/2015/03/09/mining-twitter-data-with-python-part-2
 * http://introtopython.org/visualization_earthquakes.html#Adding-detail
 
-## 结尾段
+## Conclusion
 除了CSV文件外，也可以通过推特API获取流式数据，
 使用TwitterAPI可以很轻松地收集到数百万条推文用于算法训练。
 通过Spark Stream进行情感分析，我们使用了Spark MLlib的随机森林与朴素贝叶斯进行情感分析，
