@@ -1,26 +1,13 @@
 # 小组讨论
 
-相关资料：
-* https://www.cnblogs.com/mrchige/p/6346601.html
-* https://www.jianshu.com/p/310ef75e150d
-* https://blog.csdn.net/qq_41853758/article/details/82934506
-* https://blog.csdn.net/wustjk124/article/details/81320995
-* https://blog.csdn.net/zyp199301/article/details/71727278
-* https://my.oschina.net/u/4347889/blog/3346852
-* https://blog.csdn.net/p_function/article/details/77713611
-
 2021年04月23日会议纪要：
-* 论文的模板有404问题，已跟Issac提出；
 * 需要朴素贝叶斯的概念以及相关引用，图片等；
 * 决定是否要用KNN，如果需要则需要文案；
-
-
 
 2021年04月15日会议纪要：
 * 特征上可以把like等加进来；
 * 大家需要读别人找到的文献；
 * 需要看朴素和随机是不是有相同的数据预处理和相同的数据展示；
-* 情感值的描述写在introduction；
 * 文献需要引用的话得先发到群里周知大家；
 * 每周二开周会，23号第一个组内deadline；
 
@@ -43,7 +30,6 @@
 * 豪胜的一些问题（自己）.
 
 please always include a 2 min overview of your current progress.
-论文标题叫什么？ Twitter sentiment analysis of the US election
 数据预处理是否要抽出来，2个算法公用相同的预处理？
 如何使用交叉引用去优化随机森林模型？
 结尾段需要对比2个算法的优劣，然后做出总结。
@@ -71,16 +57,6 @@ please always include a 2 min overview of your current progress.
 * 豪胜确定离线模型是否能搞出来？
 * 明翰的输出结果能跟雄峰的对上吗？
 
-Spark MLlib中提供的机器学习模型处理的是向量形式的数据，因此我们需将文本转换为向量形式，
-这里我们利用Spark提供的Word2Vec功能结合其提供的text8文件中的一部分单词进行了word2vec模型的预训练，
-并将模型保存至word2vecM_simple文件夹中，因此本次实验中将tweets转换为向量时直接调用此模型即可。
-
-可以使用text8自行训练词向量转换模型，或线上搜索利用tweets进行分词训练的word2vec模型。
-* https://www.cnblogs.com/tina-smile/p/5204619.html
-* https://blog.51cto.com/u_15127586/2670975
-* https://blog.csdn.net/chuchus/article/details/71330882
-* https://blog.csdn.net/chuchus/article/details/77145579
-
 Ian:
 * So the important thing is to talk about how you approached doing the classification in a big-data way that makes sense, not just we did some random forests but how did you specifically exploit big-data techniques to make this faster. It's not just a machine learning coursework, although you need to talk about that you also need to talk about how you exploited big data techniques to make this more efficient. So basically, you need to describe how you used spark to parallelise your data - you should show how you successfully split your dataset into multiple parts and trained the classifier that way, as opposed to just running it normally on a single node.
 * 没有标准测量情感值的准确度（除非手动标记每个推特的情感值，当然这不可能），我们要评估的是the accuracy of prediciting TextBlob labels（这不是问题），我们假设Textblob的准确度很高，我们只需要去复制TextBlob的结果。
@@ -91,11 +67,8 @@ Ian:
 因为对于某个特定的实例来说可能大量数据是完全【不相关的】，那就没有必要做拟合，我们只需要拟合【相关的】数据即可。可以搜classification local model，详情可以访问这里https://www.tandfonline.com/doi/abs/10.1198/0003130031423?casa_token=bNOVUPIwxgcAAAAA%3Ahepruxxl3lT7zTolJkgkITOBVlwpi8lnEyWQaI5k8uyWbsAGTkrtmQx0MSUCKeLRfQST-P0yIBRQ&
 * `数据预处理之前需要做数据清洗，修改或删除数据，变成需要的方式，细节可以发给Ian再看一眼。`
 * 提升分类器的准确度取决于你选择的features，以及参数的调教，可以调整树的数量以及深度，再去对比结果，看是否有效。
-* 
-
 
 ---
-
 # Twitter sentiment analysis of the US election
 ## Introduction
 In today's DT (Data Technology) age, social media platforms have become a popular communication tools, such as Twitter, Facebook, Instagram and so on. People record their lives and share or discuss their opinions on different topics on mobile devices or PCs every day. With more and more users discussing or expressing their opinions, Twitter has become a valuable source of comments and emotional information.
@@ -104,16 +77,38 @@ For the massive distributed data on the Internet, those data could be used to do
 
 American election related information data of Twitter could be combined with the Spark MLlib techniques used for sentiment analysis, through the analysis of the sentiment results, it could visually see people of different places in the United States thought the two presidential candidates, also it could be applied to different machine learning algorithms to understand whether twitter related with real results.
 
-`（确定是否需要KNN）`
-Two algorithms are used for sentiment analysis: Random Forest and Naive Bayes. (Need to introduce random forest and Naive Bayes)
+Two algorithms are used for sentiment analysis: Random Forest and Naive Bayes.
+`（豪胜，确定是否需要KNN，如果需要则要引入相关概念，引用，图片等。）`
 
+Random Forest is a flexible ensemble classifier algorithm, which constructs multiple decision trees based on random samples and random features of the training dataset, and the output is determined by the vote. The random reduces the influence of exceptional samples and features on classification results.（引用：2篇文章）
 
 ![image](https://user-images.githubusercontent.com/42234021/115829497-f9a48580-a406-11eb-9ba9-2b2f48e6a140.png)
 Figure 2 Classification process based on the random forest algorithm A redesign of the original inspired figure found from the following website: https://www.linkedin.com/pulse/random-forest-algorithm-in- teractive-discussion-niraj-kumar/.
 
-`（需要朴素贝叶斯的概念以及相关引用，图片等。）`
+`（志鹏，需要朴素贝叶斯的相关概念，引用，图片等。）`
 
+The aim of this paper is to evaluate which algorithm is more suitable twitter sentiment analysis and the relationship between sentiment analysis result and reality result.
+（志鹏，明翰，阐述论文的目的，论文的观点）
 
+情感值的描述写在introduction
+
+There are several sections about the sentiment analysis, the first section is 
+
+The first section analyses which language is easier to learn for beginners, then the second section focuses on which language is more popular in the world and what are their application scenarios, the final section will explain which language is developed more efficiently.
+
+Data analysis, we use train data set to train or use test data set to test our 2-3 different models, such as Random Forest, Naive Bayes, and KNN(maybe).
+Optimization Model, actually, we have some problems about this step, so we will let you know later. 
+
+Data Applying, we use new brand data to feed our trained models and use Basemap which is a third party package for map visualization in Python to draw two Amercian maps and they will show how people feel about Trump and Biden in different states.
+
+此外，还需要使用一个离线模型对文本进行特征提取以及向量化，
+之后建立模型并对模型进行训练与测试，评估+优化模型？可以先不写？
+应用模型于数据，将将分析结果汇总并可视化，可以清晰的看到推特数据与真实结果的差异性，
+推特上的地理信息可以在做数据可视化的时候将数据直观地呈现在美国地图上。
+
+Spark MLlib中提供的机器学习模型处理的是向量形式的数据，因此我们需将文本转换为向量形式，
+这里我们利用Spark提供的Word2Vec功能结合其提供的text8文件中的一部分单词进行了word2vec模型的预训练，
+并将模型保存至word2vecM_simple文件夹中，因此本次实验中将tweets转换为向量时直接调用此模型即可。
 
 流程：
 获取推特数据
@@ -123,31 +118,11 @@ Figure 2 Classification process based on the random forest algorithm A redesign 
 应用数据，结果可视化（通过Python的地图可视化工具Basemap）
 
 Process:
-
 Get Twitter data
-
 Data preprocessing
-
 Data analysis (training, testing)
-
 Evaluation + Optimization Model? Can I just leave it out?
-
 Apply the data and visualize the results (via Python's map visualization tool BaseMap)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 我们主要使用2个算法来做情感分析：随机森林，朴素贝叶斯。
 （需要介绍一下随机森林与朴素贝叶斯）
@@ -159,7 +134,12 @@ Apply the data and visualize the results (via Python's map visualization tool Ba
 4. 评估+优化模型？可以先不写？
 5. 应用数据，结果可视化（通过Python的地图可视化工具Basemap）
 
-## 随机森林实现方式
+## Data selection, pre-processing and cleaning
+The raw data were downloaded from Kaggle website, they are two CVS files which are hashtag_donaldtrump.csv (971157 rows of data) and hashtag_joebiden.csv (777078 rows of data). They included loads of tweets about JoeBiden and DonaldTrump.
+
+we need to read messages from those CSV files, and format data. we need to split them, remove useless keywords, URLs and special characters, and we need to use offline model called Word2Vector to transform words into vectors. Then we use TextBlob, which is a Python natural language processing package, converts the content of Twitter text into an emotional attribute value, such as positive, neutral and negative. then we have two important things: vectors and the corresponding sentiment value, which means we have label and features, label and features make up the training data set.
+
+## Data analysis by Random Forest implementation
 （需要引入文献）
 
 分别从Kaggle网站上获取关于特朗普与拜登的相关推特原始CSV数据，
@@ -173,16 +153,17 @@ TextBlob is a Python (2 and 3) library for processing textual data.
 It provides a simple API for diving into common natural language processing (NLP) tasks such as part-of-speech tagging, 
 noun phrase extraction, sentiment analysis, classification, translation, and more.
 
-此外，还需要使用一个离线模型对文本进行特征提取以及向量化，
-之后建立模型并对模型进行训练与测试，评估+优化模型？可以先不写？
-应用模型于数据，将将分析结果汇总并可视化，可以清晰的看到推特数据与真实结果的差异性，
-推特上的地理信息可以在做数据可视化的时候将数据直观地呈现在美国地图上。
+提升分类器的准确度取决于你选择的features，以及参数的调教，可以调整树的数量以及深度，再去对比结果，看是否有效。
 
-## 朴素贝叶斯实现方式
-* http://spark.apache.org/docs/latest/ml-classification-regression.html#naive-bayes
-* https://developer.ibm.com/alert-zh
-* https://marcobonzanini.com/2015/03/09/mining-twitter-data-with-python-part-2
-* http://introtopython.org/visualization_earthquakes.html#Adding-detail
+
+## Data analysis by Naive Bayes implementation
+（志鹏）
+
+## Data analysis by KNN implementation
+（豪胜）
+
+## Data Visualization
+（雄峰）
 
 ## Conclusion
 除了CSV文件外，也可以通过推特API获取流式数据，
@@ -190,25 +171,43 @@ noun phrase extraction, sentiment analysis, classification, translation, and mor
 通过Spark Stream进行情感分析，我们使用了Spark MLlib的随机森林与朴素贝叶斯进行情感分析，
 已经使用了BaseMap进行可视化，通过可视化结果，我们可以直观的感受2个候选人在美国各个州的受欢迎程度。
 
-（需要对比一下2种模型的不同与优劣，最后下结论）
+（明翰，志鹏，需要对比一下2种模型的不同与优劣，最后下结论）
 情感分析还适用于其他场景，例如房价、物价、交通等等，在大数据中扮演十分重要的角色。
 
+## References
+（会用工具自动生成）
+
+《How Many Trees in a Random Forest?》
+Thais Mayumi Oshiro, Pedro Santoro Perez, and Jos´e Augusto Baranauskas Department of Computer Science and Mathematics
+Faculty of Philosophy, Sciences and Languages at Ribeirao Preto University of Sao Paulo
+
+《Application of Support Vector Machine, Random Forest, and Genetic Algorithm Optimized Random Forest Models in Groundwater Potential Mapping》
+Seyed Amir Naghibi1 & Kourosh Ahmadi2 & Alireza Daneshi3
+
 ---
-Overview
-Our project is about Twitter sentiment analysis of the US election. 
-We have several steps to make this happen.
+# 参考资料
+## 随机森林
+* https://www.cnblogs.com/mrchige/p/6346601.html
+* https://www.jianshu.com/p/310ef75e150d
+* https://blog.csdn.net/qq_41853758/article/details/82934506
+* https://blog.csdn.net/wustjk124/article/details/81320995
+* https://blog.csdn.net/zyp199301/article/details/71727278
+* https://my.oschina.net/u/4347889/blog/3346852
+* https://blog.csdn.net/p_function/article/details/77713611
 
-Step 1:
-Data Collecting, we downloaded raw data from Kaggle website, they are two CVS files which included so many tweets about JoeBiden and DonaldTrump. 
+## 朴素贝叶斯
+* http://spark.apache.org/docs/latest/ml-classification-regression.html#naive-bayes
+* https://developer.ibm.com/alert-zh
+* https://marcobonzanini.com/2015/03/09/mining-twitter-data-with-python-part-2
+* http://introtopython.org/visualization_earthquakes.html#Adding-detail
 
-Step 2:
-Data Preproccessing, we need to read messages from those CSV files, and format data. we need to split them,  remove useless keywords, URLs and special characters, and we need to use offline model called Word2Vector to transform words into vectors. Then we use TextBlob, which is a Python natural language processing package, converts the content of Twitter text into an emotional attribute value, such as positive, neutral and negative. then we have two important things: vectors and the corresponding [ˌkɒrəˈspɒndɪŋ] sentiment value, which means we have label and features, label and features make up the training data set.
+## 向量
+Spark MLlib中提供的机器学习模型处理的是向量形式的数据，因此我们需将文本转换为向量形式，
+这里我们利用Spark提供的Word2Vec功能结合其提供的text8文件中的一部分单词进行了word2vec模型的预训练，
+并将模型保存至word2vecM_simple文件夹中，因此本次实验中将tweets转换为向量时直接调用此模型即可。
 
-Step 3:
-Data analysis, we use train data set to train or use test data set to test our 2-3 different models, such as Random Forest, Naive Bayes, and KNN(maybe).
-
-Step 4:
-Optimization Model, actually, we have some problems about this step, so we will let you know later. 
-
-Step 5:
-Data Applying, we use new brand data to feed our trained models and use Basemap which is a third party package for map visualization in Python to draw two Amercian maps and they will show how people feel about Trump and Biden in different states.
+可以使用text8自行训练词向量转换模型，或线上搜索利用tweets进行分词训练的word2vec模型。
+* https://www.cnblogs.com/tina-smile/p/5204619.html
+* https://blog.51cto.com/u_15127586/2670975
+* https://blog.csdn.net/chuchus/article/details/71330882
+* https://blog.csdn.net/chuchus/article/details/77145579
