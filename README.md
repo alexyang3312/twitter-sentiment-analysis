@@ -116,6 +116,7 @@ we need to read messages from those CSV files, and format data. we need to split
 
 ## Data analysis by Random Forest implementation
 （需要引入文献）
+为什么使用随机森林，情感分析是把推特数据归为若干类：积极，中立，消极，而随机森林正好适用于这种分类算法。
 
 
 
