@@ -104,7 +104,7 @@ The raw data were downloaded from Kaggle website, they are two CVS files which a
 
 In data preprocessing, the text data are read by using Spark from those CSV files, and then they are splitted to 70% for training and 30% for testing. Moreover, they are filtered, such as remove useless keywords, URLs and special characters. An offline model called Word2Vector is used to transform words into vectors. Then TextBlob is used, which is a Python natural language processing package and converts the content of Twitter text into an emotional attribute value, such as positive, neutral and negative. Then there are two important parameters: vectors and the corresponding sentiment value, which means label and features, label and features make up the training data set.
 
-## Word to vector
+## Word to vector and Feature extra.
 （豪胜）
 
 
