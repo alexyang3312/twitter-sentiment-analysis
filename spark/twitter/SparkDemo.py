@@ -22,6 +22,9 @@ from pyspark.mllib.regression import LabeledPoint
 #寻找推文的协调性
 #符号化推文的文本
 #删除停用词，标点符号，url等
+print('string.punctuation=',string.punctuation)
+# !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
+
 remove_spl_char_regex = re.compile('[%s]' % re.escape(string.punctuation))  # regex to remove special characters
 stopwords = [u'rt', u're', u'i', u'me', u'my', u'myself', u'we', u'our', u'ours', u'ourselves', u'you', u'your',
              u'yours', u'yourself', u'yourselves', u'he', u'him', u'his', u'himself', u'she', u'her', u'hers',
@@ -39,6 +42,8 @@ stopwords = [u'rt', u're', u'i', u'me', u'my', u'myself', u'we', u'our', u'ours'
 # tokenize函数对tweets内容进行分词
 def tokenize(text):
     tokens = []
+    # print('-----')
+    # print(text)
     text = text.encode('ascii', 'ignore').decode('ascii')  # 去掉乱码符号
     text = re.sub('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*(),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', '',
                   text)  # to replace url with ''
@@ -80,6 +85,9 @@ def doc2vec(document):
         except:
             continue
 
+    # print('--------------')
+    # print(doc_vec)
+    # print(tot_words)
     vec = doc_vec / float(tot_words)
     return vec
 
@@ -92,7 +100,124 @@ nltk.download('averaged_perceptron_tagger')
 nltk.download('brown')
 #读入数据csv数据
 def readCSV(csvName):
-    df = pd.read_table(csvName, sep=',', header='infer')
+    # df = pd.read_table(csvName, sep=',', header='infer', lineterminator="\n")
+    df = pd.read_csv(csvName, lineterminator="\n")
+    # df = sparkSession.read.format('csv').option("header", 'true').load(csvName)
+    # df = sparkSession.read.format('csv').option("header", 'true').load("csvName")# .option("multiLine", "true")
+
+    # 因为要escape大量的特殊字符或写正则，所以暂时不用这种方法遍历数据
+    # df = sparkSession.read.csv("hashtag_donaldtrump_small.csv", header=True, multiLine=True)
+    # df = sparkSession.read.csv("hashtag_donaldtrump_small.csv")
+    # df = sparkSession.read.option("multiline", "true").option("quote", '"').option("header", "true").option("escape", "\\").option("escape", '"').csv('hashtag_donaldtrump_small.csv')
+
+    # print(type(df))
+    # df.cache()
+    # df.show(10)
+    # df.printSchema()
+
+    # 删除没有用的列，只用3个元素：推特内容，洲名（地点，用于可视化），情感值（需要第三方语义分析工具转换）
+    # df = df.drop('created_at', 'tweet_id', 'likes', 'retweet_count',
+    #         'source', 'user_id', 'user_name', 'user_screen', 'user_screen_name',
+    #         'user_description', 'user_join_date', 'user_followers_count',
+    #         'user_location', 'lat', 'long', 'city', 'country',
+    #         'continent', 'state_code', 'collected_at')
+
+    # train, test = df.randomSplit([0.7, 0.3])
+    # print(train.rdd.getNumPartitions())
+    # print(train.rdd.getNumPartitions())
+    # train_rdd = train.rdd.repartition(4)
+    # test_rdd = test.rdd.repartition(2)
+    # column_names = df.columns
+    #
+    # def toPandas_partition(instances):
+    #     panda_df = pd.DataFrame(columns=column_names)  # using the global variable
+    #
+    #     for instance in instances:  # each instance is of Row type
+    #         panda_df = panda_df.append(instance.asDict(), ignore_index=True)
+    #
+    #     return [panda_df]
+    #
+    # rdd_pandas = train_rdd.mapPartitions(toPandas_partition)
+
+    # df = df.drop('created_at').drop('tweet_id').drop('likes').drop('retweet_count').drop('source').\
+    #     drop('user_id').drop('user_name').drop('user_screen').drop('user_screen_name').drop('user_description').\
+    #     drop('user_join_date').drop('user_followers_count').drop('user_location').drop('lat').drop('long').\
+    #     drop('city').drop('country').drop('continent').drop('state_code').drop('collected_at')
+
+    # 遍历数据，做数据预处理
+    trn_data = []
+
+    for index, row in df.iterrows():
+        # print(index,row['tweet'],row['state'])
+        # 语义分析，转换成感情值，详情参考https://textblob.readthedocs.io/en/dev
+        # print(TextBlob(row['tweet']).sentiment.polarity)
+
+        if (isinstance(row['tweet'], str) == False):
+            continue
+
+        token_text = tokenize(row['tweet'])  # 规范化推特文本，进行分词
+        tweet_text = doc2vec(token_text)  # 将文本转换为向量
+        # 使用LabeledPoint 将文本对应的情感属性polariy：该条训练数据的标记label，tweet_text：训练分类器的features特征，结合成可作为spark mllib分类训练的数据类型
+        tempPolarity = TextBlob(row['tweet']).sentiment.polarity
+
+        if tempPolarity > 0:
+            # 积极
+            tempPolarity = 0
+        if tempPolarity == 0:
+            # 无感, str
+            tempPolarity = 1
+        if tempPolarity < 0:
+            # 消极
+            tempPolarity = 2
+
+        # LabeledPoint(label, features)
+        # Labels should take values {0, 1, ..., numClasses-1}.
+        trn_data.append(LabeledPoint(tempPolarity, tweet_text))
+
+    trnData = sc.parallelize(trn_data)
+    # print(trn_data)
+    # print(trnData)
+    print(trnData.count())
+    return trnData
+
+# 训练随机森林分类器模型
+# train_dataRDD = readCSV('hashtag_donaldtrump_small.csv')
+# train_dataRDD = readCSV('hashtag_donaldtrump_medium.csv')
+train_dataRDD = readCSV('hashtag_donaldtrump.csv')
+train_dataRDD.cache()
+model = RandomForest.trainClassifier(train_dataRDD, numClasses=3, categoricalFeaturesInfo={},
+                                     numTrees=6, featureSubsetStrategy="auto",
+                                     impurity='gini', maxDepth=8, maxBins=32)
+
+print(model.numTrees())
+# 6
+print(model.totalNumNodes())
+# 1106
+
+# 利用训练好的模型进行模型性能测试
+# tst_dataRDD = readCSV('hashtag_joebiden_small.csv')
+# tst_dataRDD = readCSV('hashtag_joebiden_medium.csv')
+tst_dataRDD = readCSV('hashtag_joebiden.csv')
+tst_dataRDD.cache()
+
+# 计算正确率
+from sklearn.metrics import accuracy_score
+textblobData = tst_dataRDD.map(lambda lp: lp.label).collect()
+# 使用TextBlob转化出来的labels
+predictionData = model.predict(tst_dataRDD.map(lambda x: x.features)).collect()
+# 预测好的labels，通过features来预测labels
+print('accuracy rate', accuracy_score(textblobData, predictionData))
+# 检查使用TextBlob转化出来的labels与使用模型预测出来的labels是否相等
+
+# print('Learned classification tree model:')
+# 输出训练好的随机森林模型
+# print(model.toDebugString())
+print("------------------------------------------------------")
+# 地图相关demo代码：
+
+#读入数据csv数据，地理信息数据
+def readCSV2(csvName):
+    df = pd.read_table(csvName, sep=',', header='infer', lineterminator="\n")
     # 删除没有用的列，只用3个元素：推特内容，洲名（地点，用于可视化），情感值（需要第三方语义分析工具转换）
     # df = df.drop('created_at', 'tweet_id', 'likes', 'retweet_count',
     #         'source', 'user_id', 'user_name', 'user_screen', 'user_screen_name',
@@ -117,12 +242,16 @@ def readCSV(csvName):
 
     for index, row in df.iterrows():
         # print(index,row['tweet'],row['state'])
-        # 语义分析，转换成感情值
+        # 语义分析，转换成感情值，详情参考https://textblob.readthedocs.io/en/dev
         # print(TextBlob(row['tweet']).sentiment.polarity)
+
+        if (type(row['tweet']) != 'str'):
+            continue
 
         token_text = tokenize(row['tweet'])  # 规范化推特文本，进行分词
         tweet_text = doc2vec(token_text)  # 将文本转换为向量
         # 使用LabeledPoint 将文本对应的情感属性polariy：该条训练数据的标记label，tweet_text：训练分类器的features特征，结合成可作为spark mllib分类训练的数据类型
+        state = row['state']
         tempPolarity = TextBlob(row['tweet']).sentiment.polarity
 
         if tempPolarity > 0:
@@ -135,7 +264,10 @@ def readCSV(csvName):
             # 消极
             tempPolarity = 2
 
-        trn_data.append(LabeledPoint(tempPolarity, tweet_text))
+        # LabeledPoint(label, features)
+        # Labels should take values {0, 1, ..., numClasses-1}.
+        dict = {'polarity': tempPolarity, 'state': state}
+        trn_data.append(dict)
 
     trnData = sc.parallelize(trn_data)
     # print(trn_data)
@@ -143,29 +275,37 @@ def readCSV(csvName):
     print(trnData.count())
     return trnData
 
-# 训练随机森林分类器模型
-model = RandomForest.trainClassifier(readCSV('hashtag_donaldtrump_small.csv'), numClasses=3, categoricalFeaturesInfo={},
-                                     numTrees=6, featureSubsetStrategy="auto",
-                                     impurity='gini', maxDepth=8, maxBins=32)
+# popdensity_blank = {
+#     'New Jersey':  0., 'Rhode Island': 0., 'Massachusetts': 0., 'Connecticut': 0.,
+#     'Maryland': 0.,'New York': 0., 'Delaware': 0., 'Florida': 0., 'Ohio': 0., 'Pennsylvania': 0.,
+#     'Illinois': 0., 'California': 0., 'Hawaii': 0., 'Virginia': 0., 'Michigan':    0.,
+#     'Indiana': 0., 'North Carolina': 0., 'Georgia': 0., 'Tennessee': 0., 'New Hampshire': 0.,
+#     'South Carolina': 0., 'Louisiana': 0., 'Kentucky': 0., 'Wisconsin': 0., 'Washington': 0.,
+#     'Alabama':  0., 'Missouri': 0., 'Texas': 0., 'West Virginia': 0., 'Vermont': 0.,
+#     'Minnesota':  0., 'Mississippi': 0., 'Iowa': 0., 'Arkansas': 0., 'Oklahoma': 0.,
+#     'Arizona': 0., 'Colorado': 0., 'Maine': 0., 'Oregon': 0., 'Kansas': 0., 'Utah': 0.,
+#     'Nebraska': 0., 'Nevada': 0., 'Idaho': 0., 'New Mexico':  0., 'South Dakota':    0.,
+#     'North Dakota': 0., 'Montana': 0., 'Wyoming': 0., 'Alaska': 0.}
+# popdensity_blank2=popdensity_blank.copy()
 
-print(model.numTrees())
-# 6
-print(model.totalNumNodes())
-# 1106
+# predictionsArray = predictions.collect()
 
-# 利用训练好的模型进行模型性能测试
-tst_dataRDD = readCSV('hashtag_joebiden_small.csv')
-predictions = model.predict(tst_dataRDD.map(lambda x: x.features))
-labelsAndPredictions = tst_dataRDD.map(lambda lp: lp.label).zip(predictions)
-# 计算分类错误率
-print(labelsAndPredictions)
-testErr = labelsAndPredictions.filter(lambda v: v[0] != v[1]).count() / float(tst_dataRDD.count())
-print('Test Error = ' + str(testErr))
-print('Learned classification tree model:')
-# 输出训练好的随机森林的分类决策模型
-print(model.toDebugString())
+# i = 0
+# tst_dataRDD = readCSV2('hashtag_joebiden_small.csv')
+# for j in tst_dataRDD.collect():
+#     try:
+#         state = j['state']
+#         popdensity_blank[state] += (j['polarity'] - 1)
+#         popdensity_blank2[state] += (predictionsArray[i] - 1)
+#         i += 1
+#     except:
+#         continue
 
-print("------------------------------------------------------")
+# for x in popdensity_blank:
+#     print(x)
+#
+# for y in popdensity_blank2:
+#     print(y)
 
 print(456)
 print(456)
