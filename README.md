@@ -1,77 +1,10 @@
 # 小组讨论
-
-2021年04月23日会议纪要：
-* 需要朴素贝叶斯的概念以及相关引用，图片等；
-* 决定是否要用KNN，如果需要则需要文案；
-* 志鹏有一个文献有流程图，需要做一张图，链接会后找，用管道；
-* 需要考虑使用非大数据结构作为对照（待定）；
 * 需要把州名为空的数据过滤掉；
-
-2021年04月15日会议纪要：
-* 特征上可以把like等加进来；
-* 大家需要读别人找到的文献；
-* 需要看朴素和随机是不是有相同的数据预处理和相同的数据展示；
-* 文献需要引用的话得先发到群里周知大家；
-* 每周二开周会，23号第一个组内deadline；
-
-论文要求（可以适当调整，不用100%按照规则）：
-* 5-8页，不能超过8页，包括图片、引用列表、附录；
-* PDF格式，IEEE格式
-* 摘要，当读者是外行，最多250字；
-* 开头段最多写1页，outline the project contributions是什么；
-* 对学术引用的调查研究最多1.5页；
-* 解决方案最多1.5页；
-* 具体的技术实现细节，最多1页；
-* 结果与讨论，最多2页；
-* 结尾段最多500字；
-* 15-25个文献引用；
-
-
-周知：
-* `大部分代码源自网络，进行了一部分修改，提交到老师前需要一系列修改并做查重，不要抄袭，引用他人代码需要标注；`
-* `大数据的小组项目没有宽限期；`
-* 真正跑数据的时候，可以用老师新发的邮件里的平台，之前都是跑小规模数据；
-* 小组项目不需要使用HDFS，直接从硬盘读取文件即可；
 
 已知问题：
 * pandas可能会有性能问题，默认没办法并行，是否需要使用dataframe，写正则？
-* 读取数据是否需要使用Python多线程？-可以用也可以不用，不是这个项目的重点。
 * `是否需要使用多分区？需要！`
 * 对训练好的模型进行评估+性能测试+优化模型？
-
-问老师问题：
-* How do we determine the number of test sets and training sets? We only have 2 CSV files, which are hashtag_donaldtrump.csv (971157 rows of data) and hashtag_joebiden.csv (777078 rows of data). 
-* How can we improve the accuracy of the Random Forest model?
-* We found Spark DataFrame cannot read the CSV normally when some strange strings showed up.
-* 豪胜的一些问题（自己）.
-
-please always include a 2 min overview of your current progress.
-数据预处理是否要抽出来，2个算法公用相同的预处理？
-如何使用交叉引用去优化随机森林模型？
-结尾段需要对比2个算法的优劣，然后做出总结。
-
-论文要求：
-* `4月26日前要提交，4个人写一篇论文即可；`
-* 论文需要15-25个引用，更多说明在文档上都有；
-* 相当于是整个项目的草稿draft，不计分，同学+老师也会参与评价，不要弄得太好，你懂的，自己给自己留一些已知的空间，要将同学的反馈考虑到自己的项目中；
-* 论文结构有例子，论文需要引用，Turnitin查重；
-* 总结出来问题问老师或助教；
-* 大数据的作业最多写8页，是算上图的，图也会占用空间，5-8页就可以，不要在论文中引入过多的表格和图片；
-* `第一次提交不用包含代码，只需要写论文，不要包含作者名字，不要透露作者是谁，因为后面有双盲；`
-
-人员/计划安排：
-* 论文整体把握-明翰（相关owner写自己的部分）
-* 随机森林-明翰
-* 朴素贝叶斯-志鹏（比随机森林更简单+适合，有参考资料）
-* 数据可视化-雄风（工作量减小，有参考代码，是否需要可视化要问老师？）
-* Word2Vec-豪胜
-* KNN-豪胜
-* 语义转换包-?
-
-依赖关系：
-* 志鹏确定一下预处理部分是否能摘出来吗？
-* 豪胜确定离线模型是否能搞出来？
-* 明翰的输出结果能跟雄峰的对上吗？
 
 Ian:
 * So the important thing is to talk about how you approached doing the classification in a big-data way that makes sense, not just we did some random forests but how did you specifically exploit big-data techniques to make this faster. It's not just a machine learning coursework, although you need to talk about that you also need to talk about how you exploited big data techniques to make this more efficient. So basically, you need to describe how you used spark to parallelise your data - you should show how you successfully split your dataset into multiple parts and trained the classifier that way, as opposed to just running it normally on a single node.
