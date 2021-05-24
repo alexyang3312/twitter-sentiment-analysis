@@ -1,11 +1,6 @@
 # 小组讨论
 * 需要把州名为空的数据过滤掉；
 
-已知问题：
-* pandas可能会有性能问题，默认没办法并行，是否需要使用dataframe，写正则？
-* `是否需要使用多分区？需要！`
-* 对训练好的模型进行评估+性能测试+优化模型？
-
 Ian:
 * So the important thing is to talk about how you approached doing the classification in a big-data way that makes sense, not just we did some random forests but how did you specifically exploit big-data techniques to make this faster. It's not just a machine learning coursework, although you need to talk about that you also need to talk about how you exploited big data techniques to make this more efficient. So basically, you need to describe how you used spark to parallelise your data - you should show how you successfully split your dataset into multiple parts and trained the classifier that way, as opposed to just running it normally on a single node.
 * 没有标准测量情感值的准确度（除非手动标记每个推特的情感值，当然这不可能），我们要评估的是the accuracy of prediciting TextBlob labels（这不是问题），我们假设Textblob的准确度很高，我们只需要去复制TextBlob的结果。
